@@ -1,3 +1,9 @@
+/**
+ * Tristan Van Thielen
+ * Bachelor Burgerlijk Ingenieur CWSELT
+ * https://github.com/tristanvanthielen/ProjectOOP
+ */
+
 package hillbillies.model;
 
 import java.util.Arrays;
