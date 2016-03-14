@@ -14,13 +14,24 @@ import be.kuleuven.cs.som.annotate.Basic;
 /**
  * A class of units
  * 
- * @invar ... | isValidAttribute(this.getStrength())
- * @invar ... | isValidAttribute(this.getAgility())
- * @invar ... | isValidAttribute(this.getWeigth())
- * @invar ... | isValidAttribute(this.getToughness())
- * @invar ... | isValidName(this.getName())
- * @invar ... | isValidPoints(this.getHitpoints())
- * @invar ... | isValidPoints(this.getStaminapoints())
+ * @invar 	... 
+ * 			| isValidAttribute(this.getStrength())
+ * @invar 	... 
+ * 			| isValidAttribute(this.getAgility())
+ * @invar 	... 
+ * 			| isValidAttribute(this.getWeigth())
+ * @invar 	... 
+ * 			| isValidAttribute(this.getToughness())
+ * @invar 	... 
+ * 			| isValidName(this.getName())
+ * @invar 	... 
+ * 			| isValidPoints(this.getHitpoints())
+ * @invar 	... 
+ * 			| isValidPoints(this.getStaminapoints())
+ * @invar	...
+ * 			| isValidPosition(this.getPosition())
+ * @invar	...
+ * 			| isValidOrientation(this.getOrientation())
  * @author Alexander Boucquey & Tristan Van Thielen
  * @version 1.12
  * 
@@ -40,24 +51,34 @@ public class Unit {
 	 * @param 	weight
 	 * 			The number to set the unit's weight on.
 	 * @effect 	... 
+	 * 			Sets the name of this unit to the given name.
 	 * 			| setName(name)
 	 * @effect 	... 
+	 * 			Sets the strength of this unit to the given strength.
 	 * 			| setStrength(strength, 25, 100)
 	 * @effect 	... 
+	 * 			Sets the toughness of this unit to the given toughness.
 	 * 			| setToughness(toughness,25,100)
 	 * @effect 	... 
+	 * 			Sets the agility of this unit to the given agility.
 	 * 			| setAgility(agility, 25, 100)
 	 * @effect 	... 
+	 * 			Sets the weight of this unit to the given weight.
 	 * 			| setWeight(weight, 100)
 	 * @effect 	... 
+	 * 			Sets the hitpoints of this unit to the given hitpoints.
 	 * 			| setHitpoints(maxPoints)
 	 * @effect 	... 
+	 * 			Sets the staminapoints of this unit to the given staminapoints.
 	 * 			| setStaminapoints(maxPoints)
 	 * @effect 	... 
+	 * 			Sets the movementspeed of this unit to the given movementspeed.
 	 * 			| setBaseMovespeed()
 	 * @effect 	... 
+	 * 			Sets the position of this unit to the given position.
 	 * 			| setPosition(initialPosition)
 	 * @effect 	... 
+	 * 			Sets the orientation of this unit to the given orientation.
 	 * 			| setOrientation(Math.PI/2.0)
 	 */
 
@@ -81,14 +102,19 @@ public class Unit {
 	
 	/**
 	 * Return the maximum number of hit-/ staminapoints.
+	 * @return	...
+	 * 			The result is the maximum number of hitpoints for a given unit.
+	 * 			| result == (int) Math.ceil(200.0 * this.getWeight() / 100 * this.getToughness() / 100)
 	 */
-	@Basic
 	public int getMaxPoints() {
 		return (int) Math.ceil(200.0 * this.getWeight() / 100 * this.getToughness() / 100);
 	}
 
 	/**
 	 * Return the name of the unit.
+	 * @return	...
+	 * 			Returns this unit's name.
+	 * 			| result == this.name;
 	 */
 	@Basic
 	public String getName() {
@@ -100,11 +126,14 @@ public class Unit {
 	 * 
 	 * @param 	name
 	 * 			The name to give to this unit.
-	 * @pre ...  
+	 * @pre ...
+	 * 		The name of this unit must be valid.
 	 * 		| isValidName(name)
-	 * @post ... 
-	 * 		 | new.getName() == name
+	 * @post 	... 
+	 * 			The name of the unit is now the given name.
+	 * 		 	| new.getName() == name
 	 * @throws	IllegalArgumentException
+	 * 			Throws an exception if the given name is not valid.
 	 * 			| (!isValidName(name)
 	 */
 	public void setName(String name) throws IllegalArgumentException {
@@ -122,9 +151,12 @@ public class Unit {
 	 * @param 	name
 	 * 			The name to check.
 	 * @return ... 
+	 * 			Returns true if the name's first letter is uppercase, the name's length
+	 * 			is equal or lager than two and the name only contains valid characters.
 	 * 			| if (!Character.isUpperCase(name.charAt(0))) || (name.length() < 2))
 	 *         	| 	then result == false 
-	 *         	| if (for each char in name) || (LegalCharacters.contains(Character.toString(c)))
+	 *         	| if (for each char in name) 
+	 *         	| 	(LegalCharacters.contains(Character.toString(c)))
 	 *         	| 	then result == true
 	 */
 	public static boolean isValidName(String name) {
@@ -152,6 +184,9 @@ public class Unit {
 
 	/**
 	 * Return the strength of this unit.
+	 * @return	...
+	 * 			Returns this unit's strength.
+	 * 			| result == this.strength;
 	 */
 	@Basic
 	public int getStrength() {
@@ -167,17 +202,24 @@ public class Unit {
 	 * 			The minimal amount of strength for this unit.
 	 * @param 	max
 	 * 			The maximal amount of strength for this unit.
-	 * @post ... 
-	 * 		 | new.strength == setAttribute(strength, min, max)
+	 * @post 	... 
+	 * 			If the given strength is an allowed value, then the
+	 * 			unit's new strength equals the given strength.
+	 * 		 	| new.strength == setAttribute(strength, min, max)
 	 */
 	public void setStrength(int strength, int min, int max) {
 		this.strength = setAttribute(strength, min, max);
+		this.setWeight(this.getWeight(), max);
+
 	}
 
 	private int strength;
 
 	/**
 	 * Return the toughness of this unit.
+	 * @return	...
+	 * 			Returns this unit's toughness.
+	 * 			| result == this.tougness;
 	 */
 	@Basic
 	public int getToughness() {
@@ -193,8 +235,10 @@ public class Unit {
 	 * 			The minimal amount of toughness for this unit.
 	 * @param 	max
 	 * 			The maximal amount of toughness for this unit.
-	 * @post ... 
-	 * 		 | new.toughness == setAttribute(toughness, min, max)
+	 * @post 	... 
+	 * 			If the given toughness is an allowed value, then the
+	 * 			unit's new toughness equals the given toughness.
+	 * 		 	| new.toughness == setAttribute(toughness, min, max)
 	 */
 	public void setToughness(int toughness, int min, int max) {
 		this.toughness = setAttribute(toughness, min, max);
@@ -204,6 +248,9 @@ public class Unit {
 
 	/**
 	 * Return the agility of this unit.
+	 * @return	...
+	 * 			Returns this unit's agility.
+	 * 			| result == this.agility;
 	 */
 	@Basic
 	public int getAgility() {
@@ -220,17 +267,23 @@ public class Unit {
 	 * 			The minimal amount of agility for this unit.
 	 * @param 	max
 	 * 			The maximal amount of agility for this unit.
-	 * @post ... 
-	 * 		 |new.agility == setAttribute(agility, min, max)
+	 * @post 	... 
+	 * 			If the given agility is an allowed value, then the
+	 * 			unit's new agility equals the given agility.
+	 * 		 	|new.agility == setAttribute(agility, min, max)
 	 */
 	public void setAgility(int agility, int min, int max) {
 		this.agility = setAttribute(agility, min, max);
+		this.setWeight(this.getWeight(), max);
 	}
 
 	private int agility;
 
 	/**
 	 * Return the weight of this unit.
+	 * @return	...
+	 * 			Returns this unit's weight.
+	 * 			| result == this.weight;
 	 */
 	@Basic
 	public int getWeight() {
@@ -244,11 +297,14 @@ public class Unit {
 	 * 			The number to set the unit's weight on.
 	 * @param 	max
 	 * 			The maximal amount of weight for this unit.
-	 * @post ... 
-	 * 		 |new.weight == setAttribute(weight, (this.strength + this.agility)/2, max)
+	 * @post 	... 
+	 * 			If the given weight is an allowed value, then the
+	 * 			unit's new weight equals the given weight.
+	 * 		 	|new.weight == setAttribute(weight, (this.strength + this.agility)/2, max)
 	 */
 	public void setWeight(int weight, int max) {
 		this.weight = this.setAttribute(weight, (this.strength + this.agility) / 2, max);
+		this.setBaseMovespeed();
 	}
 
 	private int weight;
@@ -263,6 +319,11 @@ public class Unit {
 	 * @param 	max
 	 * 			The maximal value for this attribute.
 	 * @return  ... 
+	 * 			If the given value is smaller than the smallest allowed value
+	 * 			then the result is that smallest value. If the given value is
+	 * 			larger than the largest allowed value, then the result is that
+	 * 			largest value. If the given value is within the boundries then
+	 * 			the result is that given value.
 	 * 			| if (isValidAttribute(attribute,min, max)) 
 	 * 			| 	then result ==attribute 
 	 * 			| else if (attribute < min) 
@@ -289,6 +350,9 @@ public class Unit {
 	 * @param	max
 	 * 			The maximal value for the attribute.
 	 * @return  ... 
+	 * 			If the given values lies between the given maximum
+	 * 			and minimum, then the result is true. If this is not
+	 * 			case then the result is false.
 	 * 			| if ((attribute >= min) && (attribute <=max)) 
 	 * 			| 	then result == true 
 	 * 			| else 
@@ -302,6 +366,9 @@ public class Unit {
 
 	/**
 	 * Return the current hitpoints of this unit.
+	 * @return	...
+	 * 			Returns this unit's hitpoints.
+	 * 			| result == this.hitpoints;
 	 */
 	@Basic
 	public int getHitpoints() {
@@ -313,12 +380,14 @@ public class Unit {
 	 * 
 	 * @param 	hitpoints
 	 * 			The number to set this unit's hitpoints on.
-	 * @pre ... 
+	 * @pre ...
+	 * 		The given value must a valid number of points. 
 	 * 		| isValidPoints(hitpoints) 
-	 * @post... 
+	 * @post...
+	 * 		The unit's hipoints are now equal to the given
+	 * 		number of hitpoints. 
 	 * 		| new.getHitpoints() == hitpoints
 	 */
-	
 	private void setHitpoints(int hitpoints) {
 		assert (isValidPoints(hitpoints));
 		this.hitpoints = hitpoints;
@@ -330,9 +399,9 @@ public class Unit {
 	 * @param 	amount
 	 * 			The number of hitpoints to give to this unit.
 	 * @effect 	... 
+	 * 			The amount of hitpoints is added to the unit's current hitpoints.
 	 * 			| setHitpoints(this.getHitpoints() + amount)
 	 */
-	@Basic
 	private void addHitpoints(int amount) {
 		this.setHitpoints(this.getHitpoints() + amount);
 	}
@@ -343,15 +412,18 @@ public class Unit {
 	 * @param 	amount
 	 * 			The number of hitpoints to substract from this unit.
 	 * @effect 	... 
+	 * 			The amount of hitpoints is substracted from the unit's current hitpoints.
 	 * 			| setHitpoints(this.getHitpoints() - amount)
 	 */
-	@Basic
 	private void substractHitpoints(int amount) {
 		this.setHitpoints(this.getHitpoints() - amount);
 	}
 
 	/**
 	 * Return the current number of staminapoints of this unit.
+	 * @return	...
+	 * 			Returns this unit's staminapoints.
+	 * 			| result == this.staminapoints;
 	 */
 	@Basic
 	public int getStaminapoints() {
@@ -364,8 +436,12 @@ public class Unit {
 	 * @param 	staminapoints
 	 * 			The number to set this unit's staminapoints on.
 	 * @pre ... 
+	 * 		The given number of points must be a valid
+	 * 		number of points.
 	 * 		| isValidPoints(staminapoints) 
 	 * @post... 
+	 * 		The unit's staminapoints now equal the given number
+	 * 		of staminapoints.
 	 * 		| new.getStaminapoints() == staminapoints
 	 */
 	private void setStaminapoints(int staminapoints) {
@@ -379,9 +455,10 @@ public class Unit {
 	 * @param 	amount
 	 * 			The number of staminapoints to give to this unit.
 	 * @effect 	... 
+	 * 			The given amount of staminapoints is added to the unit's
+	 * 			current staminapoints.
 	 * 			| setStaminapoints(this.staminapoints + amount)
 	 */
-	@Basic
 	private void addStaminapoints(int amount) {
 		this.setStaminapoints(this.staminapoints + amount);
 	}
@@ -392,9 +469,10 @@ public class Unit {
 	 * @param 	amount
 	 * 			The number of staminapoints to substract from this unit.
 	 * @effect 	... 
+	 * 			The given amount of staminapoints is substracted from the unit's
+	 * 			current staminapoints.
 	 * 			| setStaminapoints(this.staminapoints - amount)
 	 */
-	@Basic
 	private void substractStaminapoints(int amount) {
 		this.setStaminapoints(this.staminapoints - amount);
 	}
@@ -405,6 +483,9 @@ public class Unit {
 	 * @param 	points
 	 * 			The number to check.
 	 * @return 	... 
+	 * 			If the given value lies within the allowed boundries
+	 * 			then the result is true. If this is not the case
+	 * 			then the result is false.
 	 * 			| if ((points <= maxPoints) && (points >= 0)) 
 	 * 			| 	then result == true 
 	 * 			| else 
@@ -417,7 +498,8 @@ public class Unit {
 	/**
 	 * Calculate the base movementspeed from the unit based on the other attributes.
 	 * @post ...
-	 * 		 | new.BaseMovespeed == setAttribute1.5 * (this.getStrength() + 
+	 * 		 The unit's basemovementspeed is now set based on other values.
+	 * 		 | new.BaseMovespeed == setAttribute(1.5 * (this.getStrength() + 
 	 *	 	 | 				this.getAgility()) / (200 * this.getWeight() / 100)
 	 */
 	private void setBaseMovespeed() {
@@ -429,6 +511,9 @@ public class Unit {
 	/**
 	 * Return the base movementspeed of this unit.
 	 * 
+	 * @return	...
+	 * 			The result is the unit's current base movementspeed.
+	 * 			| result == this.basemovespeed
 	 */
 	@Basic
 	private double getBaseMovespeed() {
@@ -440,10 +525,11 @@ public class Unit {
 	 * 
 	 * @param 	position
 	 * 			The position to put this unit on.
-	 * @post ... 
-	 * 		 | if isValidPosition(position) 
-	 * 		 | 	then new.position == position
-	 * 
+	 * @post...
+	 * 		If the given position was valid, then the unit's
+	 * 		position is set to that position.
+	 * 		| if isValidPosition(position) 
+	 * 		| 	then new.position == position
 	 */
 	private void setPosition(double[] position) {
 		if (isValidPosition(position))
@@ -453,6 +539,9 @@ public class Unit {
 	/**
 	 * Return the current position	of this unit.
 	 * 
+	 * @return	...
+	 * 			The result is this unit's current position
+	 * 			| result == this.position
 	 */
 	@Basic
 	public double[] getPosition() {
@@ -466,8 +555,10 @@ public class Unit {
 	 * 
 	 * @param 	radian
 	 * 			The orientation to give to this unit.
-	 * @post ...
-	 *	 	 | new.orientation == radian % (2*PI)
+	 * @post...
+	 * 		The new orientation is now the given orientation,
+	 * 		but modulo 2*PI to keep it within boundaries.
+	 *	 	| new.orientation == radian % (2*PI)
 	 * 
 	 */
 	private void setOrientation(double radian) {
@@ -478,6 +569,9 @@ public class Unit {
 	/**
 	 * Return the current orientation of this unit.
 	 * 
+	 * @return	...
+	 * 			The result is the unit's current orientation.
+	 * 			| result == this.orientation
 	 */
 	@Basic
 	public double getOrientation() {
@@ -489,9 +583,9 @@ public class Unit {
 	/**
 	 * Start the unit's sprinting.
 	 * 
-	 * @post ... 
-	 * 	 	 | new.sprinting == true
-	 * 
+	 * @post... 
+	 * 		The unit's sprinting state is now true.
+	 * 	 	| new.sprinting == true
 	 */
 	public void startSprinting() {
 		this.sprinting = true;
@@ -500,9 +594,9 @@ public class Unit {
 	/**
 	 * Stop the unit's sprinting.
 	 * 
-	 * @post ... 
-	 * 	 	 | new.sprinting == false
-	 * 
+	 * @post... 
+	 * 		The unit's sprinting state is now false.
+	 * 	 	| new.sprinting == false
 	 */
 	public void stopSprinting() {
 		this.sprinting = false;
@@ -512,6 +606,8 @@ public class Unit {
 	 * Check whether the unit is sprinting.
 	 * 
 	 * @return 	... 
+	 * 			The result is a boolean that is true of the unit
+	 * 			is sprinting and false if it is not.
 	 *	   		| result == this.sprinting
 	 */
 	public boolean isSprinting() {
@@ -525,6 +621,8 @@ public class Unit {
 	 * Check whether the unit is moving.
 	 * 
 	 * @return 	... 
+	 * 			The result is a boolean that is true of the unit
+	 * 			is moving and false if it is not.
 	 *	   		| result == this.moving
 	 */
 	public boolean isMoving() {
@@ -543,15 +641,24 @@ public class Unit {
 	 * @param 	dz
 	 * 			The direction to move via the z-axis.
 	 * @effect  ...
+	 * 			If the unit can stop resting, then it's targetposition is
+	 * 			set to the center of the given cube.
 	 * 			| if (this.canStopResting())
 	 * 			|	then (setTargetPosition(new double[] { this.getCubeCoordinate()[0] + dx + 0.5
 	 * 			|							, this.getCubeCoordinate()[1] + dy + 0.5
 	 * 			|							, this.getCubeCoordinate()[2] + dz + 0.5}))
 	 * @effect	...
+	 * 			If the unit can stop resting, then it's orientation is 
+	 * 			set to respresent where the unit is moving to.
 	 *			| if ((this.canStopResting())
 	 * 			|	then (setOrientation(atan(getTartgetPosition(targetPosition)[1] - this.getPosition[1] * this.getBaseMovespeed / d1
 	 *			|				, getTartgetPosition(targetPosition)[0] - this.getPosition[0] * this.getBaseMovespeed / d1)))
 	 * @effect 	... 
+	 * 			Set the speedvector of this unit based on whether or not it is moving
+	 * 			up or down and the three dimensional direction.
+	 * 			If it is moving down then the speed is the unit's speed times 1.8.
+	 * 			If it is moving up then the speed is the unit's speed times 0.5.
+	 * 			Else it is just the unit's base movementspeed.
 	 *			| if ((this.canStopResting()) && (dz == -1))
 	 *			|	then setSpeedVector(getTartgetPosition(targetPosition)[0] - this.getPosition[0] * this.getBaseMovespeed / d1
 	 *			|						, getTartgetPosition(targetPosition)[1] - this.getPosition[1] * this.getBaseMovespeed / d1
@@ -568,12 +675,14 @@ public class Unit {
 	 *			|			+ (getTargetPosition[1] - this.getPosition[1])^2
 	 *			|			+ (getTargetPosition[2] - this.getPosition[2])^2)
 	 * @effect  ...
+	 * 			If the unit is sprinting then the speed is the unit's speed times 2.
 	 * 			| if (this.isSprinting())
-				|	then this.setCurrentSPeed(this.getBaseMovespeed()*2.0);
-				| else if (!this.isSprinting())
-				|	then this.setCurrentSPeed(this.getBaseMovespeed());
+	 *			|	then this.setCurrentSPeed(this.getBaseMovespeed()*2.0);
+	 *			| else if (!this.isSprinting())
+	 *			|	then this.setCurrentSPeed(this.getBaseMovespeed());
 	 *	
 	 * @post...
+	 * 		The unit is no longer resting and it is now moving.
 	 *	  	| new.resting == false;
 	 *	  	| new.moving == true;
 	 * 
@@ -608,8 +717,6 @@ public class Unit {
 			vz = (this.getTargetPosition()[2] - this.getPosition()[2]) * v / d1;
 			this.setOrientation(Math.atan2(vy, vx));
 
-			
-
 			this.setSpeedVector(vx, vy, vz);
 		}
 	}
@@ -623,8 +730,10 @@ public class Unit {
 	 * 			The speed to set along the y-axis.
 	 * @param 	vz
 	 * 			The speed to set along the z-axis.
-	 * @post ... 
-	 * 	 	 | new.speedvector == {vx, vy, vz}
+	 * @post... 
+	 * 		This unit's speedvector is tow set to the given
+	 * 		values vx, vy and vz.
+	 * 	 	| new.speedvector == {vx, vy, vz}
 	 * 
 	 */
 	private void setSpeedVector(double vx, double vy, double vz) {
@@ -633,6 +742,10 @@ public class Unit {
 	
 	/**
 	 * Return the current speedvector of this unit.
+	 * 
+	 * @return	...
+	 * 			The result is this unit's speedvector.
+	 * 			| result == this.speedvector
 	 */
 	@Basic
 	private double[] getSpeedVector() {
@@ -645,6 +758,7 @@ public class Unit {
 	 * Return the current cube coordinate of this unit.
 	 * 
 	 * @return	... 
+	 * 			The result is a list of coordinates of the cube in which this unit is standing.
 	 * 			| result == ({ Math.floor(this.getPosition[0]), Math.floor(this.getPosition[1]),Math.floor(this.getPosition[2])})
 	 * 
 	 */
@@ -660,8 +774,10 @@ public class Unit {
 	 * @param 	target position
 	 * 			The position to move to.
 	 * @pre ... 
+	 * 		The given position must be a valid position.
 	 * 		| isValidPosition(targetPosition)
-	 * @post	...
+	 * @post...
+	 * 		The unit's targetposition is set to the given position.
 	 * 		| new.targetposition == targetPosition
 	 * 
 	 */
@@ -676,6 +792,9 @@ public class Unit {
 	/**
 	 * Return the target position of the unit.
 	 * 
+	 * @return	...
+	 * 			The result is this unit's targetposition.
+	 * 			| result == this.targetposition
 	 */
 	@Basic
 	private double[] getTargetPosition() {
@@ -771,8 +890,8 @@ public class Unit {
 	 *         	|	then result == false
 	 */
 	private boolean isValidPosition(double[] position) {
-		return (position[0] >= 0) && (position[0] < xMax) && (position[1] >= 0) && (position[1] < yMax)
-				&& (position[2] >= 0) && (position[2] < zMax) && (position != null);
+		return (( (position != null) && position[0] >= 0) && (position[0] < xMax) && (position[1] >= 0) && (position[1] < yMax)
+				&& (position[2] >= 0) && (position[2] < zMax));
 	}
 
 	private final int xMax = 50;
@@ -837,7 +956,7 @@ public class Unit {
 				if (this.isSprinting())
 					this.sprintDuration = this.sprintDuration + deltaT;
 				if (this.sprintDuration >= 0.1) {
-					this.setStaminapoints(this.getStaminapoints() - 1);
+					this.substractStaminapoints(1);
 					this.sprintDuration = this.sprintDuration - 0.1;
 				}
 			}
@@ -933,6 +1052,7 @@ public class Unit {
 	public void attack(Unit defender) {
 		if (this != defender) {
 			this.stopBehavior();
+			defender.stopBehavior();
 			if (canStopResting()) {
 				int[] myCube = this.getCubeCoordinate();
 				int[] defCube = defender.getCubeCoordinate();
@@ -981,7 +1101,8 @@ public class Unit {
 		this.attacker.attacking = false;
 		this.defending = false;
 		this.attacker = null;
-		this.moving = true;
+		if (this.globalTarget != null)
+			this.moveTo(new int[] {(int) this.globalTarget[0], (int) this.globalTarget[1], (int) this.globalTarget[2]});
 
 	}
 	
@@ -1020,12 +1141,15 @@ public class Unit {
 		double dodgeChance = 0.2 * this.getAgility() / attacker.getAgility();
 		if (dodgeChance * 100 >= randNumber) {
 			double[] newPos = null;
-			while (!isValidPosition(newPos)) {
+			while ((newPos == null)||(!isValidPosition(newPos))) {
 				Random random = new Random();
 				double randNumber1 = random.nextInt(200) - 100.0;
 				double randNumber2 = random.nextInt(200) - 100.0;
 				newPos = new double[] { this.getPosition()[0] + randNumber1 / 100.0,
 						this.getPosition()[1] + randNumber2 / 100.0, this.getPosition()[2] };
+				System.out.println(newPos[0]);
+				System.out.println(newPos[1]);
+				System.out.println(newPos[2]);
 			}
 			this.setPosition(newPos);
 			return true;
