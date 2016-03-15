@@ -1064,7 +1064,7 @@ public class Unit {
 	 * 
 	 */
 	public void attack(Unit defender) {
-		if ((this != defender) && (canStopResting()) && (!this.isAttacking())){
+		if ((this != defender) && (this.canStopResting()) && (!this.isAttacking())){
 				int[] myCube = this.getCubeCoordinate();
 				int[] defCube = defender.getCubeCoordinate();
 				if ((Math.abs(myCube[0] - defCube[0]) <= 1) && (Math.abs(myCube[1] - defCube[1]) <= 1)
