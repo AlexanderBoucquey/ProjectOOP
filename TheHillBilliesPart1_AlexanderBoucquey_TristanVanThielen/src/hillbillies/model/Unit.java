@@ -808,6 +808,8 @@ public class Unit {
 	 * @param 	targetCube
 	 * 			The coordinates of the cube to move to.
 	 * @effect	...
+	 * 			Calls moveToAdjacent based on the direction the unit
+	 * 			needs to move in along the x-, y- and z-axis.
 	 * 			| dx = 0, dy = 0, dz = 0
 	 * 			| if (this.getCubeCoordinate()[0] < targetCube[0])
 	 *			|	then dx = 1;
@@ -822,7 +824,8 @@ public class Unit {
 	 *			| if (this.getCubeCoordinate()[2] > targetCube[2])
 	 *			|	then dz = -1;
 	 *			| moveToAdjacent(dx, dy, dz)
-	 * @throws IllegalArgumentException
+	 * @throws 	IllegalArgumentException
+	 * 			Throws an exception if the given cube is invalid.
 	 */
 	public void moveTo(int[] targetCube) throws IllegalArgumentException {
 		this.stopBehavior();
@@ -857,8 +860,9 @@ public class Unit {
 	/**
 	 * Set the Unit's global target on target 
 	 * 
-	 * @post ... 
-	 * 		 | new.globalTarget == target
+	 * @post...
+	 * 		The given target is now the unit's global target. 
+	 * 		| new.globalTarget == target
 	 * 
 	 */
 	void setGlobalTarget(double[] target) {
@@ -866,8 +870,11 @@ public class Unit {
 	}
 	 
 	/**
-	 * Return the global target position of the unit.	 * 
+	 * Return the global target position of the unit.
 	 *
+	 * @return	...
+	 * 			The result is the unit's current target.
+	 * 			| result == this.globalTarget
 	 */
 	@Basic
 	private double[] getGlobalTarget() {
@@ -882,6 +889,8 @@ public class Unit {
 	 * @param 	position
 	 * 			The position to check.
 	 * @return 	... 
+	 * 			If the given position lies within the boundaries of the game world
+	 * 			then the result is true. If this is not the case, then the result is false.
 	 * 			| if (position[0]>=0) && (position[0] < xMax) &&
 	 *         	|	(position[1]>=0) && (position[1] < yMax) && | (position[2]>=0) &&
 	 *         	|	(position[2] < zMax) 
@@ -997,6 +1006,8 @@ public class Unit {
 	 * Check whether the unit has rested as long as it takes to recover an hitpoint.
 	 * 
 	 * @return 	... 
+	 * 			The result is true if the unit has rested long enough
+	 * 			to restore one hitpoint.
 	 * 			| result == this.hasRestedHitpoint
 	 */
 	private boolean canStopResting() {
@@ -1009,6 +1020,7 @@ public class Unit {
 	 * @param 	speed
 	 * 			The speed at which this unit is moving.
 	 * @post...
+	 * 		The unit's current speed is now the given speed.
 	 * 		| new.currentSpeed = speed
 	 */
 	private void setCurrentSPeed(double speed){
@@ -1018,6 +1030,9 @@ public class Unit {
 	/**
 	 * Returns the unit's current speed.
 	 * 
+	 * @return	...
+	 * 			The result is the current speed of this unit.
+	 * 			| result == this.currentSpeed
 	 */
 	@Basic
 	public double getCurrentSpeed() {
@@ -1184,8 +1199,10 @@ public class Unit {
 	 * Set the unit's activity on resting.
 	 * 
 	 * @effect 	...
-	 * 			| this.stopBehavior
+	 * 			The unit stops whatever it is doing right now
+	 * 			| stopBehavior()
 	 * @post 	... 
+	 * 			The unit has started resting.
 	 * 		 	| new.resting == true
 	 */
 	public void rest() {
@@ -1194,8 +1211,12 @@ public class Unit {
 	}
 	
 	/**
-	 * check whether the unit is resting or not.
+	 * Check whether the unit is resting or not.
 	 * 
+	 * @return	...
+	 * 			The result is true if the unit is resting.
+	 * 			It is false otherwise.
+	 * 			| result == this.resting
 	 */
 	@Basic
 	public boolean isResting() {
@@ -1208,10 +1229,13 @@ public class Unit {
 	 * Set the unit's activity on working.
 	 * 
 	 * @pre		...
+	 * 			The unit must be able to stop resting.
 	 * 			| this.canStopResting()
 	 * @effect 	...
-	 * 			| stopBehavior
+	 * 			The unit stops whatever it is doing right now.
+	 * 			| stopBehavior()
 	 * @post 	... 
+	 * 			The unit is now working.
 	 * 		 	| new.working == true
 	 * 
 	 */
@@ -1224,6 +1248,9 @@ public class Unit {
 	/**
 	 * Check whether the unit is working or not.
 	 * 
+	 * @return	...
+	 * 			The result is true if the unit is resting,
+	 * 			it is false otherwise.
 	 */
 	public boolean isWorking() {
 		return this.working;
@@ -1237,6 +1264,8 @@ public class Unit {
 	 * @param	value
 	 * 			The value that indicates whether or not to acivate default behavior.
 	 * @effect 	...
+	 * 			If the given value is true, then the unit starts its default
+	 * 			behavior. If it is false, then it stops it's default behavior.
 	 * 			| if (value)
 	 * 			| 	then startDefaultBehavior()
 	 * 			| else 
@@ -1255,6 +1284,8 @@ public class Unit {
 	 * Set the unit's activity on a random activity.
 	 * 
 	 * @effect	...
+	 * 			The unit either starts working, moving to a ranfom position
+	 * 			or resting.
 	 * 			| cap = 2
 	 * 			| if ((this.getHitpoints() == this.getMaxPoints()) && (this.getStaminapoints() == this.getMaxPoints()))
 	 * 			|	then cap = 1
@@ -1303,6 +1334,7 @@ public class Unit {
 	 * Stop the units Behavior.
 	 * 
 	 * @post 	...
+	 * 			The unit has stopped whatever it was doing.
 	 * 			| new.moving == false
 	 * 			| new.working == false
 	 * 			| if (this.hasRestedHitpoint)
@@ -1317,8 +1349,13 @@ public class Unit {
 	}
 	
 	/**
-	 * check whether the unit has defaultBehaviorEnabled().
+	 * Check whether the unit has defaultBehaviorEnabled().
 	 * 
+	 * @return	...
+	 * 			If the unit's default behavior is enabled, the
+	 * 			result is true. If it is not the case then it
+	 * 			is false.
+	 * 			| result == this.defaultBehavior
 	 */
 	@Basic
 	public boolean isDefaultBehaviorEnabled() {
