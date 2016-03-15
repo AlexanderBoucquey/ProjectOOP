@@ -1284,7 +1284,7 @@ public class Unit {
 	 * Set the unit's activity on a random activity.
 	 * 
 	 * @effect	...
-	 * 			The unit either starts working, moving to a ranfom position
+	 * 			The unit either starts working, moving to a random position
 	 * 			or resting.
 	 * 			| cap = 2
 	 * 			| if ((this.getHitpoints() == this.getMaxPoints()) && (this.getStaminapoints() == this.getMaxPoints()))
