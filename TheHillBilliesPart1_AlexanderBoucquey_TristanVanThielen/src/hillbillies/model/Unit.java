@@ -914,11 +914,10 @@ public class Unit {
 			this.hasRestedHitpoint = false;
 			gametime -= 180;
 		}
-		if ((this.isAttacking()) || this.isDefending()) {
-			this.moving = false;
+		if (this.isAttacking()) {
 			this.combatTime += deltaT;
-			if ((this.combatTime >= 1) && (this.isDefending())) {
-				this.defend();
+			if (this.combatTime >= 1) {
+				this.attacking = false;
 				this.combatTime = 0.0;
 			}
 
@@ -1065,27 +1064,23 @@ public class Unit {
 	 * 
 	 */
 	public void attack(Unit defender) {
-		if (this != defender) {
-			this.stopBehavior();
-			defender.stopBehavior();
-			if (canStopResting()) {
+		if ((this != defender) && (canStopResting()) && (!this.isAttacking())){
 				int[] myCube = this.getCubeCoordinate();
 				int[] defCube = defender.getCubeCoordinate();
 				if ((Math.abs(myCube[0] - defCube[0]) <= 1) && (Math.abs(myCube[1] - defCube[1]) <= 1)
 						&& (Math.abs(myCube[2] - defCube[2]) <= 1)) {
+					this.stopBehavior();
+					defender.stopBehavior();
 					this.attacking = true;
-					defender.defending = true;
-					defender.attacker = this;
 					this.setOrientation(Math.atan2(defender.getPosition()[1] - this.getPosition()[1],
 							defender.getPosition()[0] - this.getPosition()[0]));
 					defender.setOrientation(Math.atan2(this.getPosition()[1] - defender.getPosition()[1],
 							this.getPosition()[0] - defender.getPosition()[0]));
+					defender.defend(this);
 				}
 			}
-		}
 	}
-
-	private Unit attacker;
+	
 	
 	/**
 	 * Check whether the unit is attacking.
@@ -1110,12 +1105,10 @@ public class Unit {
 	 *			| new.moving = true
 	 * 
 	 */
-	private void defend() {
-		if ((!attemptDodge(this.attacker)) && (!attemptBlock(this.attacker)))
-			this.substractHitpoints(this.attacker.getStrength() / 10);
-		this.attacker.attacking = false;
+	private void defend(Unit attacker) {
+		if ((!attemptDodge(attacker)) && (!attemptBlock(attacker)))
+			this.substractHitpoints(attacker.getStrength() / 10);
 		this.defending = false;
-		this.attacker = null;
 		if (this.globalTarget != null)
 			this.moveTo(new int[] {(int) this.globalTarget[0], (int) this.globalTarget[1], (int) this.globalTarget[2]});
 
