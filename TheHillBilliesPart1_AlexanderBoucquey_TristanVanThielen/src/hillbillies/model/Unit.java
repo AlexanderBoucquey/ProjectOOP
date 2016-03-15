@@ -1045,12 +1045,6 @@ public class Unit {
 	 * 
 	 * @param 	defender
 	 * 			The unit to attack.
-	 * @pre 	... 
-	 * 			| this.canStopResting()
-	 * 			| ((Math.abs(this.getCubeCoordinate[0] - defender.getCubeCoordinate[0]) <= 1) 
-	 * 			|	&& (Math.abs(this.getCubeCoordinate[1] - defender.getCubeCoordinate[1]) <= 1)
-				|	&& (Math.abs(this.getCubeCoordinate[2] - defender.getCubeCoordinate[2]) <= 1))
-	 * 			| this != defender
 	 * @effect	...
 	 * 	 		| defender.setOrientation(Math.atan2(this.getPosition()[1] - defender.getPosition()[1],
 	 *			|			this.getPosition()[0] - defender.getPosition()[0]))
@@ -1061,6 +1055,12 @@ public class Unit {
 	 * 			| new this.attacking == true
 	 *			| defender.defending == true;
 	 *			| defender.attacker == this;
+	 *@post 	... 
+	 * 			| if this.canStopResting() && this.canStopResting() && !this.isAttacking()
+	 * 			| ((Math.abs(this.getCubeCoordinate[0] - defender.getCubeCoordinate[0]) <= 1) 
+	 * 			|	&& (Math.abs(this.getCubeCoordinate[1] - defender.getCubeCoordinate[1]) <= 1)
+	 *			|	&& (Math.abs(this.getCubeCoordinate[2] - defender.getCubeCoordinate[2]) <= 1))
+	 * 			| this != defender
 	 * 
 	 */
 	public void attack(Unit defender) {
